@@ -1,25 +1,15 @@
-export function Card({
-  className,
-  title,
-  children,
-  href,
-}: {
-  className?: string;
+interface CardProps {
   title: string;
   children: React.ReactNode;
-  href: string;
-}): JSX.Element {
+}
+
+export function Card({ title, children }: CardProps): JSX.Element {
   return (
-    <a
-      className={className}
-      href={`${href}?utm_source=create-turbo&utm_medium=basic&utm_campaign=create-turbo"`}
-      rel="noopener noreferrer"
-      target="_blank"
-    >
-      <h2>
-        {title} <span>-&gt;</span>
+    <div className="bg-white p-4 rounded-lg shadow-md  flex flex-col h-fit gap-2">
+      <h2 className="text-lg border-b pb-2 text-gray-600 text-left font-bold ">
+        {title}
       </h2>
-      <p>{children}</p>
-    </a>
+      <div className="flex flex-col justify-evenly gap-1">{children}</div>
+    </div>
   );
 }

@@ -8,7 +8,9 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
+    "@repo/db": "*",
     "@repo/eslint-config": "*",
+    "@repo/store": "*",
     "@repo/typescript-config": "*",
     "prettier": "^3.2.5",
     "turbo": "latest"
@@ -20,5 +22,8 @@
   "workspaces": [
     "apps/*",
     "packages/*"
-  ]
+  ],
+  "dependencies": {
+    "@prisma/client": "^5.15.0"
+  }
 }

@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .center-div {
+    @apply flex items-center justify-center gap-1;
+  }
+  .filled-btn {
+    @apply center-div px-2 py-1 rounded-md bg-purple-1 text-white font-medium hover:cursor-pointer hover:bg-purple-300;
+  }
+}
+
+@layer base {
+  body {
+    @apply bg-purple-2;
+  }
+}

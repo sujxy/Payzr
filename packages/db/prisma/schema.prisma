@@ -1,0 +1,81 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                  String               @id @unique @default(uuid())
+  name                String?
+  phone               String               @unique
+  email               String               @unique
+  password            String
+  account             Account[]
+  OnRampTransactions  OnRampTransactions[]
+  transactionSent     P2PTransactions[]    @relation("sentTransactions")
+  transactionReceived P2PTransactions[]    @relation("receivedTransactions")
+}
+
+model Account {
+  id      String @id @unique @default(uuid())
+  userId  String @unique
+  balance Int    @default(0)
+  locked  Int
+  user    User   @relation(fields: [userId], references: [id])
+}
+
+enum OnRampStatus {
+  Success
+  Failure
+  Processing
+}
+
+enum OnRampType {
+  credit
+  debit
+}
+
+model OnRampTransactions {
+  id        String       @id @unique @default(uuid())
+  status    OnRampStatus
+  type      OnRampType
+  token     String       @unique
+  provider  String
+  amount    Int
+  startTime DateTime
+  userId    String
+  user      User         @relation(fields: [userId], references: [id])
+}
+
+enum P2Ptype {
+  credit
+  debit
+}
+
+enum P2Pstatus {
+  Success
+  Failure
+  Processing
+}
+
+model P2PTransactions {
+  id         String    @id @unique @default(uuid())
+  senderId   String
+  receiverId String
+  amount     Int
+  status     P2Pstatus
+  type       P2Ptype
+  startTime  DateTime
+
+  sender   User @relation("sentTransactions", fields: [senderId], references: [id])
+  receiver User @relation("receivedTransactions", fields: [receiverId], references: [id])
+}
