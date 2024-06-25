@@ -15,8 +15,9 @@ export default function Page() {
   });
 
   const [amount, setAmount] = useState("");
+  const [provider, setProvider] = useState("");
   const [userId, setUserId] = useState("");
-  const [token, setToken] = useState("");
+  const [token, setToken] = useState<string | undefined>("");
   const [loading, setLoading] = useState(false);
   const params = useParams();
 
@@ -35,11 +36,16 @@ export default function Page() {
   };
   useEffect(() => {
     const getTokenData = async () => {
-      const payload = await DecodeJWT(params?.params[1]);
-      if (payload) {
-        setToken(params?.params[1]);
-        setAmount(payload.amount);
-        setUserId(payload.userId);
+      if (params.params && params.params.length > 1) {
+        const payload = await DecodeJWT(params.params[1]);
+        if (payload.userId && payload.amount && params.params[0]) {
+          setToken(params.params[1]);
+          setProvider(params.params[0]);
+          setAmount(payload.amount);
+          setUserId(payload.userId);
+        } else {
+          alert("error");
+        }
       }
     };
     getTokenData();
@@ -55,7 +61,7 @@ export default function Page() {
             {date}
           </div>
           <div className="border py-1 text-gray-500 text-sm">
-            <b>Provider : </b> <span>{params?.params[0]?.toUpperCase()}</span>
+            <b>Provider : </b> <span>{provider}</span>
           </div>
           <div className="border py-1 text-gray-500 text-sm">
             <b>Paying amount of rupees : </b> <span>{amount}</span>

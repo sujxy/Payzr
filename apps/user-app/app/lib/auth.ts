@@ -1,14 +1,13 @@
 import client from "@repo/db/client";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcrypt";
-import zod from "zod";
 
-const userSchema = zod.object({
-  name: zod.string(),
-  phone: zod.number().min(10).max(10),
-  email: zod.string(),
-  password: zod.string().min(6).max(18),
-});
+// const userSchema = zod.object({
+//   name: zod.string(),
+//   phone: zod.number().min(10).max(10),
+//   email: zod.string(),
+//   password: zod.string().min(6).max(18),
+// });
 
 export const authOptions = {
   providers: [
@@ -16,11 +15,12 @@ export const authOptions = {
       name: "Credentials",
       credentials: {
         email: {
-          label: "Email ",
+          label: "Email",
           type: "email",
           placeholder: "hello@email.com",
           required: true,
         },
+        phone: { label: "Phone", type: "number", required: true },
         password: { label: "Password", type: "password", required: true },
       },
       // TODO: User credentials type from next-aut
@@ -29,7 +29,7 @@ export const authOptions = {
         const hashedPassword = await bcrypt.hash(credentials.password, 10);
         const existingUser = await client.user.findFirst({
           where: {
-            email: credentials.email,
+            phone: credentials.phone,
           },
         });
 
@@ -52,6 +52,7 @@ export const authOptions = {
         try {
           const user = await client.user.create({
             data: {
+              phone: credentials.phone,
               email: credentials.email,
               password: hashedPassword,
             },
