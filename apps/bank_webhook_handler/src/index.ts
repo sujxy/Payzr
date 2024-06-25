@@ -1,7 +1,17 @@
 import express from "express";
 import client from "@repo/db/client";
+import cors from "cors";
 const app = express();
 app.use(express.json({}));
+app.use(
+  cors({
+    origin: ["http://localhost:3000"],
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "Accept"],
+    maxAge: 3600,
+  }),
+);
 
 app.post("/hdfcWebhook", async (req, res) => {
   //verify bank req
@@ -24,7 +34,7 @@ app.post("/hdfcWebhook", async (req, res) => {
         },
         data: {
           balance: {
-            increment: Number(paymentInformation.amount),
+            increment: Number(paymentInformation.amount) * 100,
           },
         },
       }),
@@ -57,5 +67,5 @@ app.post("/hdfcWebhook", async (req, res) => {
 });
 
 app.listen(3003, () => {
-  console.log("bank webhook handler running..");
+  console.log("bank webhook handler running on ", 3003);
 });

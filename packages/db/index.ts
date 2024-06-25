@@ -2,7 +2,11 @@ import { PrismaClient } from "@prisma/client";
 
 //function to generate and return a new client
 const generateClientSingleton = () => {
-  return new PrismaClient();
+  return new PrismaClient({
+    transactionOptions: {
+      timeout: 10000,
+    },
+  });
 };
 
 //a global prisma object declaration

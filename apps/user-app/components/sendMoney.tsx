@@ -5,14 +5,17 @@ import { useState } from "react";
 import { MoneyTransfer } from "../app/lib/actions/transferMoney";
 
 const SendMoney = () => {
-  const [amount, setAmount] = useState<string>(0);
+  const [amount, setAmount] = useState<string>("0");
   const [phone, setPhone] = useState<string>("");
-
+  const [loading, setLoading] = useState(false);
   const transferMoney = async () => {
+    setLoading(true);
     const newTransaction = await MoneyTransfer(Number(amount), phone);
     if (newTransaction.message) {
+      setLoading(false);
       alert("sent!");
     } else {
+      setLoading(false);
       alert("Retry!");
     }
   };
@@ -42,7 +45,7 @@ const SendMoney = () => {
 
       <Button
         className=" mt-3 bg-gray-800 hover:bg-gray-600 w-full"
-        label="Send Money"
+        label={loading ? "procesing" : "Send Money"}
         onClick={transferMoney}
       ></Button>
     </Card>

@@ -11,6 +11,7 @@
   "dependencies": {
     "@repo/ui": "*",
     "@types/jsonwebtoken": "^9.0.6",
+    "axios": "^1.7.2",
     "jsonwebtoken": "^9.0.2",
     "next": "^14.1.1",
     "react": "^18.2.0",

@@ -7,28 +7,29 @@ import { OnRampTransaction } from "../app/lib/actions/onRampTransactions";
 const bankProviders = [
   {
     name: "HDFC Bank",
-    redirectURL: "hdfc.com",
+    redirectURL: "http://localhost:3000/payments/hdfc",
   },
   {
     name: "Axis Bank",
-    redirectURL: "axis.com",
+    redirectURL: "http://localhost:3000/payments/axis",
   },
   {
     name: "IDFC First Bank",
-    redirectURL: "idfc.com",
+    redirectURL: "http://localhost:3000/payments/idfc",
   },
 ];
 
 const AddMoney = () => {
-  const [amount, setAmount] = useState<number>(0);
-  const [provider, setProvider] = useState<string>("Bank Service");
+  const [amount, setAmount] = useState<string>("0");
+  const [provider, setProvider] = useState<string>("");
 
   const createTransaction = async () => {
-    const newTransaction = await OnRampTransaction(amount, provider);
+    const newTransaction = await OnRampTransaction(Number(amount), provider);
     if (newTransaction.message) {
       alert("transaction created!");
       window.location.href =
-        bankProviders.find((ele) => ele.name === provider)?.redirectURL || "";
+        bankProviders.find((ele) => ele.name == provider)?.redirectURL +
+          `/${newTransaction.token}` || "";
     } else alert("transaction failed!");
   };
 
@@ -37,9 +38,9 @@ const AddMoney = () => {
       <label className="w-full">
         <p className="font-semibold text-xs text-gray-600 my-2">Amount</p>
         <input
-          type="number"
+          type="text"
           value={amount}
-          onChange={(e) => setAmount(Number(e.target.value))}
+          onChange={(e) => setAmount(e.target.value)}
           className="w-full border border-gray-500 outline-none ring-0 px-2 py-1 rounded-md"
         />
       </label>
