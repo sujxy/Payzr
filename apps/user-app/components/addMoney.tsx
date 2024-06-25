@@ -14,7 +14,7 @@ const bankProviders = [
     redirectURL: "http://localhost:3000/payments/axis",
   },
   {
-    name: "IDFC First Bank",
+    name: "IDFC Bank",
     redirectURL: "http://localhost:3000/payments/idfc",
   },
 ];
