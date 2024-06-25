@@ -5,7 +5,8 @@
     "build": "turbo build",
     "dev": "turbo dev",
     "lint": "turbo lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "db:generate": "cd packages/db && npx prisma generate && cd ../.."
   },
   "devDependencies": {
     "@repo/db": "*",
@@ -20,10 +21,7 @@
     "node": ">=18"
   },
   "packageManager": "npm@9.6.7",
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
+  "workspaces": ["apps/*", "packages/*"],
   "dependencies": {
     "@prisma/client": "^5.15.0"
   }

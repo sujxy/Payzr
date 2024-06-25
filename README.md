@@ -43,5 +43,5 @@ Install dependencies
 Start the server
 
 ```bash
-  npm run dev
+  npx turbo dev
 ```
