@@ -22,8 +22,10 @@ const bankProviders = [
 const AddMoney = () => {
   const [amount, setAmount] = useState<string>("0");
   const [provider, setProvider] = useState<string>("");
+  const [loading, setLoading] = useState(false);
 
   const createTransaction = async () => {
+    setLoading(true);
     const newTransaction = await OnRampTransaction(Number(amount), provider);
     if (newTransaction.message) {
       alert("transaction created!");
@@ -31,6 +33,7 @@ const AddMoney = () => {
         bankProviders.find((ele) => ele.name == provider)?.redirectURL +
           `/${newTransaction.token}` || "";
     } else alert("transaction failed!");
+    setLoading(false);
   };
 
   return (
@@ -62,7 +65,7 @@ const AddMoney = () => {
 
       <Button
         className=" mt-3 bg-gray-800 hover:bg-gray-600 w-[140px]"
-        label="Add Money"
+        label={loading ? "processing" : "Add Money"}
         onClick={createTransaction}
       ></Button>
     </Card>
