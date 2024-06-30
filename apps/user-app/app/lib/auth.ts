@@ -25,7 +25,6 @@ export const authOptions = {
       },
       // TODO: User credentials type from next-aut
       async authorize(credentials: any) {
-        // Do zod validation, OTP validation here
         const hashedPassword = await bcrypt.hash(credentials.password, 10);
         const existingUser = await client.user.findFirst({
           where: {
@@ -50,14 +49,24 @@ export const authOptions = {
         }
 
         try {
-          const user = await client.user.create({
-            data: {
+          const user = await client.user.upsert({
+            where: {
+              email: credentials.email,
+            },
+            update: {},
+            create: {
               phone: credentials.phone,
+              name: "User",
               email: credentials.email,
               password: hashedPassword,
+              account: {
+                create: {
+                  balance: 0,
+                  locked: 0,
+                },
+              },
             },
           });
-
           return {
             id: user.id.toString(),
             name: user.name,
@@ -74,7 +83,6 @@ export const authOptions = {
   ],
   secret: process.env.JWT_SECRET || "secret",
   callbacks: {
-    // TODO: can u fix the type here? Using any is bad
     async session({ token, session }: any) {
       session.user.id = token.sub;
 
