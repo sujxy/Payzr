@@ -7,6 +7,7 @@ import TransactionCard from "../../../components/tranactionCard";
 
 const getTransactions = async () => {
   const session = await getServerSession(authOptions);
+  if (!session.user) return [];
   const transactions = await client.onRampTransactions.findMany({
     select: {
       type: true,
@@ -16,7 +17,7 @@ const getTransactions = async () => {
       status: true,
     },
     where: {
-      userId: session?.user?.id,
+      userId: session.user.id,
     },
     orderBy: {
       startTime: "desc",
